@@ -1,0 +1,46 @@
+#!/usr/local/bin/wish
+set epsfile "eg3.eps"
+
+canvas .c
+frame .f
+button .f.quit -text "Quit" -command finishup
+pack .f -side top
+pack .f.quit -fill x -side left
+pack .c -side bottom -fill both -expand 1
+focus .c
+proc finishup {} {
+        global epsfile
+        set bb [.c bbox all]
+        if {[llength $bb] == 0} return
+        set x1 [lindex $bb 0]
+        set y1 [lindex $bb 1]
+        set w [expr [lindex $bb 2]-$x1]
+        set h [expr [lindex $bb 3]-$y1]
+        .c postscript -file $epsfile  -x $x1 -y $y1 -height $h -width $w
+	exit
+}
+# agent env (environment )
+# agent p (Proxy )
+.c create rectangle 150 5 250 25
+.c create text 200 15 -text "Proxy "
+# agent ws (Web Server)
+.c create rectangle 280 5 380 25
+.c create text 330 15 -text "Web Server"
+# message env p Page Request
+.c create line 70 50 200 50 -arrow last
+.c create text 135 42 -text "Page Request"
+# message p ws Page Request
+.c create line 200 70 330 70 -arrow last
+.c create text 265 62 -text "Page Request"
+# message ws p Page
+.c create line 330 90 200 90 -arrow last
+.c create text 265 82 -text "Page"
+# message p env Page
+.c create line 200 110 70 110 -arrow last
+.c create text 135 102 -text "Page"
+
+# Create life lines
+.c create line 200 25 200 130 
+.c create line 330 25 330 130 
+# uncomment for automatic printout and quit
+finishup

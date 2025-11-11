@@ -1,0 +1,46 @@
+#!/usr/local/bin/wish
+set epsfile "eg1.eps"
+
+canvas .c
+frame .f
+button .f.quit -text "Quit" -command finishup
+pack .f -side top
+pack .f.quit -fill x -side left
+pack .c -side bottom -fill both -expand 1
+focus .c
+proc finishup {} {
+        global epsfile
+        set bb [.c bbox all]
+        if {[llength $bb] == 0} return
+        set x1 [lindex $bb 0]
+        set y1 [lindex $bb 1]
+        set w [expr [lindex $bb 2]-$x1]
+        set h [expr [lindex $bb 3]-$y1]
+        .c postscript -file $epsfile  -x $x1 -y $y1 -height $h -width $w
+	exit
+}
+# agent T (Tutor )
+.c create rectangle 20 5 120 25
+.c create text 70 15 -text "Tutor "
+# agent L (Lecturer )
+.c create rectangle 150 5 250 25
+.c create text 200 15 -text "Lecturer "
+# agent S (Student )
+.c create rectangle 280 5 380 25
+.c create text 330 15 -text "Student "
+# message S L Question
+.c create line 330 50 200 50 -arrow last
+.c create text 265 42 -text "Question"
+# message L S Answer
+.c create line 200 70 330 70 -arrow last
+.c create text 265 62 -text "Answer"
+# message L T Answer CC
+.c create line 200 70 70 70 -arrow last
+.c create text 135 62 -text "Answer CC"
+
+# Create life lines
+.c create line 330 25 330 90 
+.c create line 70 25 70 90 
+.c create line 200 25 200 90 
+# uncomment for automatic printout and quit
+finishup

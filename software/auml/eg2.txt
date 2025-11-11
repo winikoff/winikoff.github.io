@@ -1,0 +1,19 @@
+start FIPA query protocol
+agent I Initiator
+agent P Participant
+box alt
+    message I P query-if
+  next
+    message I P query-ref
+end alt
+box alt
+    message P I not-understood
+  next
+    message P I refuse
+  next
+    message P I failure
+  next
+    message P I inform
+end alt
+finish
+

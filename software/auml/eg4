@@ -1,0 +1,17 @@
+start V0.2 features demo
+agent a An agent
+agent b Another agent
+message a b Hello
+message b a G'day
+box alt
+ guard [sunny]
+ message a b Lovely weather!
+ goto Farewell
+next
+ guard else
+ message a b Ah the rain!
+ sub Complain about the weather
+end alt
+label Farewell
+message b a Indeed
+finish

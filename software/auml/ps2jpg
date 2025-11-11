@@ -1,0 +1,11 @@
+#!/bin/sh
+#ps2jpg script by Ian Hutchinson 1997; use at your own risk.
+#You need Ghostscript and the pbmplus utilities installed. 
+if [ $# != 2 ] ; then
+       echo " Usage: $0 <file.ps> <file.jpg>" 1>&2
+       exit 1
+else 
+	gs -sDEVICE=ppm -sOutputFile=- -r100x100 -sNOPAUSE -q $1 -c showpage -c quit | pnmcrop| cjpeg >$2
+fi
+
+

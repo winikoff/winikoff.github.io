@@ -1,0 +1,64 @@
+#!/usr/local/bin/wish
+set epsfile "eg2.eps"
+
+canvas .c
+frame .f
+button .f.quit -text "Quit" -command finishup
+pack .f -side top
+pack .f.quit -fill x -side left
+pack .c -side bottom -fill both -expand 1
+focus .c
+proc finishup {} {
+        global epsfile
+        set bb [.c bbox all]
+        if {[llength $bb] == 0} return
+        set x1 [lindex $bb 0]
+        set y1 [lindex $bb 1]
+        set w [expr [lindex $bb 2]-$x1]
+        set h [expr [lindex $bb 3]-$y1]
+        .c postscript -file $epsfile  -x $x1 -y $y1 -height $h -width $w
+	exit
+}
+# agent I (Initiator )
+.c create rectangle 20 30 120 50
+.c create text 70 40 -text "Initiator "
+# agent P (Participant )
+.c create rectangle 150 30 250 50
+.c create text 200 40 -text "Participant "
+# message I P query-if
+.c create line 70 100 200 100 -arrow last
+.c create text 135 92 -text "query-if"
+.c create line 14 120 273 120 -width 2 -dash -
+# message I P query-ref
+.c create line 70 135 200 135 -arrow last
+.c create text 135 127 -text "query-ref"
+.c create rectangle 14 75 273 155 -width 2
+.c create polygon 14 75 44 75 44 88 37 95 14 95 -fill {} -outline black -width 2
+.c create text 29 85 -text "alt"
+# message P I not-understood
+.c create line 200 202 70 202 -arrow last
+.c create text 135 194 -text "not-understood"
+.c create line 14 222 273 222 -width 2 -dash -
+# message P I refuse
+.c create line 200 237 70 237 -arrow last
+.c create text 135 229 -text "refuse"
+.c create line 14 257 273 257 -width 2 -dash -
+# message P I failure
+.c create line 200 272 70 272 -arrow last
+.c create text 135 264 -text "failure"
+.c create line 14 292 273 292 -width 2 -dash -
+# message P I inform
+.c create line 200 307 70 307 -arrow last
+.c create text 135 299 -text "inform"
+.c create rectangle 14 177 273 327 -width 2
+.c create polygon 14 177 44 177 44 190 37 197 14 197 -fill {} -outline black -width 2
+.c create text 29 187 -text "alt"
+.c create rectangle 7 5 280 334 -width 2
+.c create polygon 7 5 127 5 127 18 120 25 7 25 -fill {} -outline black -width 2
+.c create text 67 15 -text "FIPA query protocol"
+
+# Create life lines
+.c create line 200 50 200 334 -dash -
+.c create line 70 50 70 334 -dash -
+# uncomment for automatic printout and quit
+finishup

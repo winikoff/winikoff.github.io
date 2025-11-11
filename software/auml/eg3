@@ -1,0 +1,7 @@
+invis env environment
+role p Proxy
+role ws Web Server
+message env p Page Request
+message p ws Page Request
+message ws p Page
+message p env Page

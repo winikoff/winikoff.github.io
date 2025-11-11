@@ -1,0 +1,92 @@
+#!/usr/local/bin/wish
+set epsfile "eg4.eps"
+
+canvas .c
+frame .f
+button .f.quit -text "Quit" -command finishup
+pack .f -side top
+pack .f.quit -fill x -side left
+pack .c -side bottom -fill both -expand 1
+focus .c
+proc finishup {} {
+        global epsfile
+        set bb [.c bbox all]
+        if {[llength $bb] == 0} return
+        set x1 [lindex $bb 0]
+        set y1 [lindex $bb 1]
+        set w [expr [lindex $bb 2]-$x1]
+        set h [expr [lindex $bb 3]-$y1]
+        .c postscript -file $epsfile  -x $x1 -y $y1 -height $h -width $w
+	exit
+}
+# agent a (An agent)
+.c create rectangle 20 30 120 50
+.c create text 70 40 -text "An agent"
+# agent b (Another agent)
+.c create rectangle 150 30 250 50
+.c create text 200 40 -text "Another agent"
+# message a b Hello
+.c create line 70 75 200 75 -arrow last
+.c create text 135 67 -text "Hello"
+# message b a G'day
+.c create line 200 95 70 95 -arrow last
+.c create text 135 87 -text "G'day"
+proc delay1 {} {
+  .c create rectangle 68 135 72 145 -outline {} -fill white 
+  .c create text 70 140 -text "\[sunny\]"
+}
+# message a b Lovely weather!
+.c create line 70 160 200 160 -arrow last
+.c create text 135 152 -text "Lovely weather!"
+proc delay2 {} {
+  .c create rectangle 52.5 180 217.5 205 -outline {} -fill white
+  .c create arc 40 180 65 205 -start 90 -extent 180 -style arc
+  .c create arc 205 180 230 205 -start 270 -extent 180 -style arc
+  .c create line 52.5 180 217.5 180
+  .c create line 52.5 205 217.5 205
+  .c create text 135 192.5 -text "Farewell"
+  .c create polygon 195 182 207.5 192.5 195 203 -fill black
+}
+.c create line 14 212 273 212 -width 2 -dash -
+proc delay3 {} {
+  .c create rectangle 68 237 72 247 -outline {} -fill white 
+  .c create text 70 242 -text "else"
+}
+# message a b Ah the rain!
+.c create line 70 262 200 262 -arrow last
+.c create text 135 254 -text "Ah the rain!"
+proc delay4 {} {
+  .c create rectangle 21 282 266 312 -width 2 -fill white
+  .c create polygon 21 282 51 282 51 295 44 302 21 302 -fill {} -outline black -width 2
+  .c create text 36 292 -text "ref"
+  .c create text 143.5 297 -font {Helvetica 14} -text "Complain about the weather"
+}
+.c create rectangle 14 115 273 319 -width 2
+.c create polygon 14 115 44 115 44 128 37 135 14 135 -fill {} -outline black -width 2
+.c create text 29 125 -text "alt"
+proc delay5 {} {
+  .c create rectangle 52.5 341 217.5 366 -outline {} -fill white
+  .c create arc 40 341 65 366 -start 90 -extent 180 -style arc
+  .c create arc 205 341 230 366 -start 270 -extent 180 -style arc
+  .c create line 52.5 341 217.5 341
+  .c create line 52.5 366 217.5 366
+  .c create text 135 353.5 -text "Farewell"
+  .c create polygon 62.5 343 75 353.5 62.5 364 -fill black
+}
+# message b a Indeed
+.c create line 200 388 70 388 -arrow last
+.c create text 135 380 -text "Indeed"
+.c create rectangle 7 5 280 408 -width 2
+.c create polygon 7 5 127 5 127 18 120 25 7 25 -fill {} -outline black -width 2
+.c create text 67 15 -text "V0.2 features demo"
+
+# Create life lines
+.c create line 70 50 70 408 -dash -
+.c create line 200 50 200 408 -dash -
+delay1
+delay2
+delay3
+delay4
+delay5
+# uncomment for automatic printout and quit
+finishup

@@ -1,0 +1,244 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.79 [en] (Windows NT 5.0; U) [Netscape]">
+   <meta name="Author" content="Michael Winikoff">
+   <title>AUML-2 Tool</title>
+</head>
+<body>
+
+<h1>
+AUML-2 &amp; Interaction Diagram Tool</h1>
+This web page describes a textual notation for describing interaction diagrams
+and interaction protocols in a (subset of) AUML-2. There is also an associated
+(<b><font color="#FF0000">prototype</font></b>!) tool that takes these
+textual descriptions and generates a graphical diagram (in encapsulated
+postscript).
+<p>Further information:
+<ul>
+<li> Some slides describing the tool (<a href="auml.ppt">ppt</a>,
+<a href="auml.pdf">pdf</a>,
+<a href="auml6.pdf">pdf-6up</a>)
+<li> The textual notation and tool support is covered in the following papers. 
+The ISEAT paper was the first published description, the demonstration just mentions the support in PDT briefly, whereas the more recent journal paper is the most comprehensive (and definitive) version.
+<ul>
+<li> Michael Winikoff.
+<em><a href="../Papers/iseat05auml.pdf">Towards Making Agent UML Practical: A 
+Textual Notation and a Tool</a></em>.
+First international workshop on 
+Integration of Software
+Engineering and Agent Technology (ISEAT 2005). September 2005, Melbourne,
+Australia.
+<li> Lin Padgham, John Thangarajah, Michael Winikoff.
+<i><a href="http://www.ifaamas.org/Proceedings/aamas07/html/Padgham-AUML.xml">AUML Protocols and Code Generation in the Prometheus Design Tool</a></i>.
+Accepted as a demonstration to be given at the
+<a href="http://www.aamas2007.org/">Sixth
+International Joint Conference on Autonomous Agents and Multiagent Systems
+(AAMAS 2007)</a>.
+<li> Michael Winikoff.
+<i>Defining syntax and providing tool support for Agent UML using a textual 
+notation</i>, International  Journal Agent-Oriented Software Engineering, Vol. 1, No. 2,  
+pp.123-144, 2007.
+</ul>
+
+
+</ul>
+<p><b>NEW:</b> Similar functionality has now been built into the 
+<a href="http://www.cs.rmit.edu.au/agents/pdt/">Prometheus Design Tool (PDT)</a>, making the prototype tool obsolete. <p>
+
+<h2>
+Usage</h2>
+Prepare a text file with a description. In the steps below we assume that
+this is in a file called test.
+<ol>
+<li>
+Download auml.pl</li>
+
+<li>
+<tt>./auml.pl test</tt></li>
+
+<li>
+<tt>wish test.tk</tt></li>
+
+<li>
+<tt>ghostview test.eps</tt></li>
+</ol>
+<b>Notes:</b>
+<ul>
+<li>
+Wish requires an X display to be available, so run it on an xterm or under
+vncviewer, not using telnet/ssh</li>
+
+<li>
+auml.pl is written in perl and generates a Tcl/Tk script. Both Perl and
+Tcl/Tk are installed on yallara.</li>
+</ul>
+<b>Download:</b> <tt><a href="auml-new.pl">auml-new.pl</a></tt>. (or <a
+href="auml.pl">older version</a> or <a
+href="aumlold.pl">even older
+version</a>)
+<br>&nbsp;
+<h2>
+Input Format</h2>
+An input file consists of a series of commands, one command per line. Usually,
+the first few commands define agents/roles and then the rest of the file
+defines messages between them. The order that agents appear from left to
+right is the order in which they are defined.
+<p>Available commands are the following: (<tt>guard</tt>, <tt>sub</tt>,
+<tt>goto</tt> and <tt>label</tt> are new)
+<ul>
+<li>
+<tt><b>start</b> <i>protocol name</i></tt> - occurs at the start and gives
+the protocol name. This indicated that an AUML-2 protocol is being defined
+rather than an interaction diagram.</li>
+
+<li>
+<b><tt>finish</tt></b> - occurs at the end of the file and indicates the
+end of the protocol. Only used if you have <b><tt>start</tt></b>.</li>
+
+<li>
+<tt><b>agent</b> <i>shortname longname</i></tt> - defines an agent. The
+shortname is used to refer to the agent in messages whereas the longname
+is what is displayed in the diagram. For example, <tt>agent c Customer</tt>.</li>
+
+<li>
+<tt><b>role</b> <i>shortname longname</i></tt> - same as <tt>agent shortname
+longname</tt>.</li>
+
+<li>
+<tt><b>invis</b> <i>shortname</i></tt> <i><tt>longname</tt></i> - used
+to create an agent with no lifeline. Useful for having a source for initial
+messages (see the examples
+<a href="#examples">below</a>). Note that the
+longname isn't used but something must still be there.</li>
+
+<li>
+<tt><b>message</b> <i>from to message description</i></tt> - a message;
+note that short names are used to refer to agents. For example, <tt>message
+c s Response</tt>.</li>
+
+<li>
+<b><tt>backup</tt></b> - used to shift the current point backwards. Normally
+having two messages has the first message occuring before the second. By
+putting a <tt>backup</tt> before the second message the two messages will
+be simultaneous (see the examples <a href="#examples">below</a>).</li>
+
+<li>
+<b><tt>skip</tt></b> - opposite of backup. Creates space.</li>
+
+<li>
+<tt><b>box</b> <i>type</i></tt> - creates an AUML box. For example, <tt>box
+alt</tt>.</li>
+
+<li>
+<b><tt>next</tt></b> - creates a dashed line within an AUML box indicating
+the next region.</li>
+
+<li>
+<tt><b>end</b> <i>type</i></tt> - closes an AUML box. Note that the <tt>type</tt>
+is optional, if it is given it must match with the opening box.</li>
+
+<li>
+<tt><b>guard</b> <i>guard text</i></tt> - places a guard</li>
+
+<li>
+<tt><b>sub</b> <i>sub protocol name</i></tt> - invokes a sub-protocol</li>
+
+<li>
+<tt><b>goto</b> <i>name of label</i></tt> - a "goto" continuation</li>
+
+<li>
+<tt><b>label</b> <i>name of label</i></tt> - a "label" (or target) continuation</li>
+
+<li>
+<tt><b>action </b><i>agent action text</i></tt> - this is one way of presenting
+actions. It is <b>not</b> conformant with the AUML-2 standard. It's basically
+a variant of a guard: the <i>action text</i> is placed centered over the
+lifeline of the named (using the short name) agent.</li>
+</ul>
+
+<h2>
+Converting Postscript to Other Formats</h2>
+Firstly, why postscript? Because it produces high quality printouts and
+can be scaled to any resolution.
+<p>Converting to bitmap formats (e.g. for the web, for powerpoint presentations)
+can be done using ghostview. Under windows, ghostview offers a convert
+option. Under unix, you can call gs with various command line arguments
+to convert postscript to a range of formats.
+<p>For example, the following command converts eg1.eps to eg1.jpg:
+<br>&nbsp;<tt>gs -sDEVICE=ppm -sOutputFile=- -r100x100 -sNOPAUSE -q eg1.eps
+-c showpage -c quit | pnmcrop| cjpeg > eg1.jpg</tt>
+<br>&nbsp;
+<h2>
+<a NAME="examples"></a>Examples</h2>
+Firstly, a simple interaction diagram (download: <a href="eg1.txt">txt</a>,
+<a href="eg1.eps">eps</a>).
+Note the use of backup to have two simultaneous messages.
+<p><img SRC="eg1.jpg" height=114 width=480 align=RIGHT><tt>agent T Tutor</tt>
+<br><tt>agent L Lecturer</tt>
+<br><tt>agent S Student</tt>
+<br><tt>message S L Question</tt>
+<br><tt>message L S Answer</tt>
+<br><tt>backup</tt>
+<br><tt>message L T Answer CC</tt>
+<p>Secondly, a simple interaction protocol (download: <a href="eg2.txt">txt</a>,
+<a href="eg2.eps">eps</a>).
+Note that indentation makes no difference to the tool, but makes the protocol's
+textual description more readable to humans.
+<p><img SRC="eg2.jpg" NOSAVE height=441 width=366 align=RIGHT><tt>start
+FIPA query protocol</tt>
+<br><tt>agent I Initiator</tt>
+<br><tt>agent P Participant</tt>
+<br><tt>box alt</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; message I P query-if</tt>
+<br><tt>&nbsp; next</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; message I P query-ref</tt>
+<br><tt>end alt</tt>
+<br><tt>box alt</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; message P I not-understood</tt>
+<br><tt>&nbsp; next</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; message P I refuse</tt>
+<br><tt>&nbsp; next</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; message P I failure</tt>
+<br><tt>&nbsp; next</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; message P I inform</tt>
+<br><tt>end alt</tt>
+<br><tt>finish</tt>
+<br clear=both>&nbsp;
+<p>Thirdly, an example illustrating the use of <tt>invis</tt> (download:
+<a href="eg3.txt">txt</a>,<a href="eg3.eps">eps</a>).
+<p><img SRC="eg3.jpg" height=167 width=413 align=RIGHT><tt>invis env environment</tt>
+<br><tt>role p Proxy</tt>
+<br><tt>role ws Web Server</tt>
+<br><tt>message env p Page Request</tt>
+<br><tt>message p ws Page Request</tt>
+<br><tt>message ws p Page</tt>
+<br><tt>message p env Page</tt>
+<br clear=both>Finally, a silly example illustrating some of the new features. (download:
+<a href="eg4.txt">txt</a>,<a href="eg4.eps">eps</a>).
+<p><img SRC="eg4.jpg" height=540 width=366 align=RIGHT><tt>agent a An agent</tt>
+<br><tt>agent b Another agent</tt>
+<br><tt>message a b Hello</tt>
+<br><tt>message b a G'day</tt>
+<br><tt>box alt</tt>
+<br><tt>&nbsp; guard [sunny]</tt>
+<br><tt>&nbsp; message a b Lovely weather!</tt>
+<br><tt>&nbsp; goto Farewell</tt>
+<br><tt>next</tt>
+<br><tt>&nbsp; guard else</tt>
+<br><tt>&nbsp; message a b Ah the rain!</tt>
+<br><tt>&nbsp; sub Complain about the weather</tt>
+<br><tt>end alt</tt>
+<br><tt>label Farewell</tt>
+<br><tt>message b a Indeed</tt>
+<br><tt>finish</tt>
+<h2>
+Bugs</h2>
+Yes :-)
+<p>Seriously, this is a <b><font color="#FF0000">prototype</font></b>.
+Use at your own risk. If you find bugs please let me know. if you want
+to fix bugs yourself or enhance the tool feel free to do so. If you add
+cool new functionality please send me a copy!
+</body>
+</html>

@@ -1,0 +1,431 @@
+<html>
+<head>
+<LINK REL="stylesheet" HREF="../style.css" TYPE="text/css">
+<title>W-Prolog</title>
+<META name="description"
+	content="W-Prolog: A simple Prolog interpreter written in Java.">
+<META name="keywords" content="prolog java wprolog w-prolog">
+</head>
+<body>
+
+<p>
+
+<hr noshade size=4>
+
+<center>
+<h1>W-Prolog</h1>
+<table width=180 border=0 cellpadding=0 cellspacing=0><tr><td align=center>
+<font size=-1><a href=http://www.links2go.com/topic/Prolog>
+<img alt="Key Resource" src="key.gif" width=121 height=121 border=0><br>
+<b><i>Links<sup><small>2</small></sup>Go</i> Key Resource</b><br>
+Prolog Topic</a></font></td></tr></table>
+</center>
+
+<hr noshade>
+
+<h1>Table of Contents</h1>
+<table>
+<tr align=left>
+<td align=left>
+<font face="Helvetica,Arial">
+1. Introduction<br>
+&nbsp; &nbsp; 1.1 The Distribution<br>
+2. The Language<br>
+3. Usage<br>
+&nbsp; &nbsp; 3.1 Embedding the W-Prolog Engine<br>
+4. The User interface<br>
+&nbsp; &nbsp; 4.1 Applet<br>
+&nbsp; &nbsp; 4.2 Application<br>
+5. Comments<br>
+&nbsp; &nbsp; 5.1 Bugs<br>
+&nbsp; &nbsp; 5.2 Further Work<br>
+6. Related Work<br><br>
+Appendices<br>
+A. History<br>
+B. Legalese<br>
+</font>
+</td>
+</tr>
+</table>
+
+<hr noshade>
+<p>
+<center>
+<font color="red" size="+1">
+New version (1.2.1) fixes bug with the unification of
+a variable to itself.
+</font></center> <p>
+
+<hr noshade>
+
+<h1>1. Introduction</h1>
+
+W-Prolog is an interpreter for a Prolog like language implemented in Java.
+The implementation is extremely portable and can be run as an
+applet under Java-capable web browsers. <p>
+
+W-Prolog has a nicer user interface than most Prolog systems (which typically
+provide a command line interface). It provides simple tracing and has
+an (optional) occur check. <p>
+
+The W-Prolog system is small and comparatively simple. However it is not
+particularly fast. <p>
+
+W-Prolog has been:
+<ul>
+<li> Used as part of
+	<A href="http://kti.ms.mff.cuni.cz/~bartak/index.html">
+	Roman Bart&aacute;k</a>'s
+	<a href="http://kti.ms.mff.cuni.cz/~bartak/prolog/index.html">
+	Guide to Prolog Programming</a>
+<li> Used to compute
+ <a href="http://lucy.ukc.ac.uk/Kinship/kin.html">kinship relationships
+	</a> at the
+	<a href="http://lucy.ukc.ac.uk/">center for social anthropology
+	and computing</a> at the University of Kent.
+<li> Extended by 
+	<a href="http://www.iro.umontreal.ca/~vaucher/">Jean Vaucher</a> 
+	with arithmetic, assert/retract, and cut. The result is 
+	<a href="http://www.iro.umontreal.ca/~vaucher/XProlog/">XProlog</a>.
+<li> Used by
+	<A href="http://fernandokoch.fateback.com/">Fernando Koch</a>
+	as the basis for the inference engine of 
+	<a href="http://home.wanadoo.nl/agentlight/">AgentLight</a>, a 
+	light-weight multi-agent platform running on small devices (PDAs, 
+	phones).
+<li> Used by 
+	<A href="http://fernandokoch.fateback.com/">Fernando Koch</a> as the
+	basis for M-Prolog, part of 
+	<a href="http://www.cs.uu.nl/3apl-m/">3APL-M</a>, a light-weight 
+	implementation of the 3APL ("Triple-A-P-L") agent-oriented programming 
+	language.
+<li> 
+<A href="http://mprolog.skyservers.org/">Ported to C#</a> by Hugo Jose Ferreira, who also added a GUI to enable 
+	it to run on the PocketPC.
+<li> <a href="http://search.cpan.org/~ovid/AI-Prolog-0.03/">Ported to Perl</a> by 
+<a href="http://users.easystreet.com/ovid/">Curtis 'Ovid' Poe</a>.
+<li> Extended by <a href="http://wwwhome.cs.utwente.nl/~schooten/">Boris van
+Schooten</a> into <a
+href="http://wwwhome.cs.utwente.nl/~schooten/yprolog/">YProlog</a> (Boris
+extended XProlog)
+<li> This page has been <a href="http://science.webhostinggeeks.com/w-prolog">translated to Serbo-Croatian</a> by Anja Skrba from <a href="http://webhostinggeeks.com/besthosting.html"> Webhostinggeeks.com</a>.
+
+<!-- 
+<li>This page has been translated to<a href="http://translate.coupofy.com/w-prolog/">Slovak</a>  by Juraj Rehorovsky from<a href="http://www.coupofy.com/">Coupofy team</a>
+-->
+
+</ul>
+<p>
+
+<h2>1.1 The Distribution</h2>
+
+W-Prolog is available as source code
+(<a href="WProlog.java"><tt>WProlog.java</tt></a>), and
+as a zip file containing class files
+(<a href="wp.zip"><tt>wp.zip</tt></a>).
+<p>
+<b>NEW</b> W-Prolog is now also available as a clickable jar file
+(<a href="wp.jar"><tt>wp.jar</tt></a>)
+<p>
+
+If you want to try W-Prolog now (and are viewing this with a Java
+capable browser) just click the button below. <p>
+
+<center>
+<applet code=WProlog.class width=100 height=65>
+[There would be a Prolog interpreter here if your browser supported Java]
+</applet>
+</center>
+
+<h1>2. The Language</h1>
+
+The language is given by the following simple grammar:
+<p>
+Program ::= Rule | Rule Program <br>
+Query ::= Term <br>
+<br>
+Rule ::= Term <b>.</b>  | Term <b>:-</b> Terms <b>.</b> <br>
+Terms ::= Term | Term <b>,</b> Terms<br>
+Term ::= Number | Variable | AtomName | AtomName<b>(</b>Terms<b>)</b> <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        | <b>[]</b> | <b>[</b>Terms<b>]</b>
+        | <b>[</b>Terms <b>|</b> Term<b>]</b> <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        | <b>print(</b>Term<b>)</b>
+        | <b>nl</b>
+        | <b>eq(</b>Term <b>,</b> Term<b>)</b> <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        | <b>if(</b>Term <b>,</b> Term <b>,</b> Term<b>)</b>
+        | <b>or(</b>Term <b>,</b> Term <b>)</b>
+        | <b>not(</b>Term<b>)</b>
+        | <b>call(</b>Term<b>)</b>
+        | <b>once(</b>Term<b>)</b> <br>
+Number ::= Digit | Digit Number <br>
+Digit ::= <b>0</b> | ... | <b>9</b> <br>
+AtomName ::= LowerCase | LowerCase NameChars <br>
+Variable ::= UpperCase | UpperCase NameChars <br>
+NameChars ::= NameChar | NameChar NameChars <br>
+NameChar ::= <b>a</b> | ... | <b>z</b> | <b>A</b> | ... | <b>Z</b> | Digit <br>
+
+<p>
+
+Comments begin with a <b>%</b> and terminate at the end of the line or
+begin with <b>/*</b> and terminate with <b>*/</b>. <p>
+
+Note that as of version 1.2 code of the form <tt>p(X) :- X</tt> will not work.
+Instead, use the new builtin <b>call</b> as follows:
+<tt>p(X) :- call(X)</tt>. <p>
+Note also, that the clauses defining a predicate need to be contiguous.
+So, for example, use:
+<pre>
+a :- b.
+a :- c.
+b :- defn.
+c :- defn.
+</pre>
+and not:
+<pre>
+a :- b.
+b :- defn.
+a :- c.
+c :- defn.
+</pre>
+
+<h1>3. Usage</h1>
+
+W-Prolog can be run as an applet or as a standalone application.
+It can also be embedded and called from another program. <p>
+
+To run W-Prolog as an applet construct an HTML file containing the tag:
+<pre>
+&lt;center&gt;
+&lt;h1&gt;W-Prolog&lt;/h1&gt;
+&lt;applet code=WProlog.class width=120 height=65&gt;
+&lt;/applet&gt;
+&lt;/center&gt;
+</pre>
+and use netscape (or internet explorer) to view this file. <p>
+
+Alternatively, just use the address
+<a href="http://www.cs.rmit.edu.au/~winikoff/wp/"><em>
+http://www.cs.rmit.edu.au/~winikoff/wp/</em></a>. <p>
+
+To run W-Prolog as a standalone application you need to have the Java Development
+Kit (JDK). The command is <tt>java WProlog</tt> where
+the directory containing the class files must be in the
+CLASSPATH. <p>
+
+<h2>3.1 Embedding the W-Prolog Engine</h2>
+
+The W-Prolog inference engine can be called from Java code.
+The program <a href="Go.java"><tt>Go.java</tt></a> shows how to do this. <p>
+
+
+<h1>4. The User interface</h1>
+
+The user interface is different in applets. We address the common aspects first.
+<p>
+
+The top row (labeled <em>Query</em>) contains a text field into which a Prolog
+atom can be typed (for example <tt>append(X,Y,[1,2,3,4])</tt> - note that no
+terminating full stop is necessary). The first button (<em>Run Query</em>)
+will start the query running and the second (<em>More</em>) will seek
+alternative solutions to a succesful query. <p>
+
+The top text area (labeled <em>Program</em>) contains the program text.
+The bottom text area (labeled <em>Results</em>) contains the output from
+W-Prolog. The button marked <em>Clear</em> clears the results text area.
+The two toggles (<em>Occur Check</em> and <em>Trace</em>) control
+respectively whether the occur check is performed and whether tracing
+information is output. <p>
+
+To quit W-Prolog either click on the close window button (if your window
+manager supplies one or if you're using Windows) or select <em>Quit</em>
+from the menu. <p>
+
+<h2>4.1 Applet</h2>
+
+<img src="screen/win95net.jpg"
+	width=432 height=559 alt="[Picture of WProlog Applet]" align=right>
+
+Applets have a number of limitations - for example they can not write to files
+or open network connections to arbitrary machines.
+As a consequence (and due to a number of bugs in netscape) the applet
+version of W-Prolog doesn't allow loading and saving of programs. <p>
+
+The applet version of W-Prolog has four buttons:
+<DL>
+<DT> <em>Benchmark</em>:
+<DD> Runs the standard naive reverse benchmark. The formula
+	<em>496 / runtime</em> gives the speed in logical inferences per
+	second.
+<DT> <em>About...</em>:
+<DD> Puts some brief information about the author
+	(<a href="../index.html">Michael Winikoff</a>)
+	and version (currently 1.2) into the program text area.
+<DT> <em>Append</em>:
+<DD>	Puts a simple append program into the text area.
+<DT> <em>Documentation</em>:
+<DD> Opens a browser window on this file.
+</DL>
+
+<br clear=right>
+
+<h2>4.2 Application</h2>
+
+<img src="screen/applic.jpg" width=428 height=553 alt="[Picture of WProlog Application]" align=right>
+
+When run as a standalone application the four buttons are replaced by
+file loading and saving capabilities. The name of the file is
+shown in a (non-editable) text field  (labeled <em>File:</em>).
+The button <em>Load</em> brings up a standard file requester and loads
+the selected file. The <em>Save</em> button writes the program to
+the file from which it was loaded. <p>
+
+<h1>5. Comments</h1>
+
+It is recomended that W-Prolog be run as a standalone application.
+Earlier versions of W-Prolog supported loading files in the applet version.
+This worked flawlesly when run with Sun's appletviewer but refused to work
+under netscape. <p>
+
+Another example of undesired behavior under netscape concerns threads.
+Each query in W-Prolog runs in its own thread.
+This means that a long running (or non terminating) query won't freeze
+the interface (although it will slow subsequant queries down).
+This works, but not under netscape. <p>
+
+<h2>5.1 Bugs</h2>
+No known current bugs.
+Please <a href="mailto:winikoff@acm.org">let me know</a> if you
+find any. <p>
+
+<h2>5.2 Further Work</h2>
+At the moment I don't anticipate having time to extend W-Prolog in the near
+future.
+Future extensions would include:
+<ul>
+<li> Arithmetic <br>
+<b>NEW</b>
+Joachim Wolf Laudien has suggested that the following predicates
+could be used to provide arithmetic:
+<pre>
+sum(X, zero, X).
+sum(X, succ(Y), succ(Z)) :- sum(X, Y, Z).
+
+product(X, zero, zero).
+product(X, succ(Y), Z) :- sum(X, P, Z), product(Y, X, P).
+</pre>
+<li> Characters and strings
+<li> Input
+<li> Graphics and other access to Java libraries (eg. networking)
+<li> Iterative Deepening
+<li> Example Programs
+</ul>
+
+<h1>6. Related Work</h1>
+
+<a href="http://clement.info.umoncton.ca/~tarau/">Paul Tarau</a> and
+Bart Demoen have written a Prolog interpreter in Java.
+Their interpreter compiles Prolog (and is faster!) but doesn't have a GUI.
+Their work is available at
+<a href="http://www.cs.kuleuven.ac.be/~bmd/PrologInJava/"><em>
+http://www.cs.kuleuven.ac.be/~bmd/PrologInJava/</em></a>. <p>
+
+Another Prolog interpreter in Java can be found
+<a href="http://www.bird-land.com/java/prolog/index.html">here</a>.
+Unfortunately, it appears to use Lisp-ese syntax and has no documentation!<p>
+
+<b>Update:</b>
+Since I wrote W-Prolog and this page a number of other logic programming languages
+implemented using Java have appeared (including LL, JavaLog, Jinni, and
+MINERVA). You can find links to all of these
+<A href="http://user.cs.tu-berlin.de/~tolk/">Robert Tolksdorf's</a>
+page on
+<a href="http://www.is-research.de/info/vmlanguages/">
+Languages for
+the Java VM</a>. <p>
+
+
+<hr noshade>
+
+<img src="wprologmac.jpg" width=432 height=559 align=right>
+
+<h1>A. History</h1>
+
+<h2>Version 1.0</h2>
+Initial release in October 1996. Ran applet in browser window.
+My first Java program, written in a little over a week.
+W-Prolog 1.0 was the first Prolog interpreter written in Java.
+It's release was followed by the release of Demoen and Tarau's compiler (which,
+in fact, was compiling and running Prolog code in August 1996). <p>
+
+<h2>Version 1.1</h2>
+
+<ul>
+<li> Changed user interface.
+<li> Added ability to save file if run as an application.
+<li> If run as an application W-Prolog uses a file requester for
+        loading and saving.
+<li> If run as an applet W-Prolog starts up in its own window.
+<li> Changed default font.
+<li> Removed all options.
+<li> Fixed performance bug - the occur check was always being performed ...
+<li> Fixed bug: if the query can't be parsed then the part of the
+        query which caused the problem is highlighted.
+        Previously, if the query had a syntax error then the program
+        would be highlighted.
+<li> Some optimisation - looking up clauses is now done once rather than
+        at each execution step.
+<li> Added indication of memory being used.
+<li> Changed <tt>Engine</tt> to make embedding in another application
+	easier.
+</ul>
+
+<h2>Version 1.2</h2>
+
+<ul>
+<li> Changed user intergace (again!) -- removed loading option in applets.
+<li> Fixed bug with indexing.
+<li> Added <tt>call</tt>.
+<li> Added handling of <tt>QUIT</tt> event.
+</ul>
+
+<h3>Version 1.2.1</h3>
+<ul>
+<li> Fixed bug where a variable unified to itself created a circular
+	binding rather than doing nothing.
+</ul>
+
+
+<h1>B. Legalese</h1>
+
+Feel free to use W-Prolog for private or academic (research or educational)
+use.
+For other use (for example, including W-Prolog on CD or archive) please
+<a href="mailto:winikoff@acm.org">contact me</a>. <p>
+
+When making copies, please keep all files together (including this
+documentation) and do not change anything. <p>
+
+
+<hr noshade>
+
+<font size=-1>
+Accesses since June, 1:
+</font>
+
+<!-- BEGIN LE FASTCOUNTER CODE -->
+<a href="http://member.linkexchange.com/cgi-bin/fc/fastcounter-login?214636" target="_top">
+<img width=90 height=16 border="0" src="http://fastcounter.linkexchange.com/fastcounter?214636+429279" alt="[Counter]"></a>
+<!-- END LE FASTCOUNTER CODE -->
+<!-- BEGIN LE FASTCOUNTER LINK -->
+<font face="arial" size="1">
+<a href="http://www.fastcounter.com/fc-join"
+target="_top">LE FastCounter</a></font><br>
+<!-- END LE FASTCOUNTER LINK -->
+
+<hr noshade size=4>
+
+</body>
+</html>
